@@ -3,6 +3,7 @@ package com.gabriel_os_sousa.loterias.controller;
 import com.gabriel_os_sousa.loterias.model.request.LotofacilRequest;
 import com.gabriel_os_sousa.loterias.model.response.LotofacilResponse;
 import com.gabriel_os_sousa.loterias.service.LotofacilService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class LotofacilController {
   }
 
   @PostMapping
-  public Mono<LotofacilResponse> saveConcurso(@RequestBody LotofacilRequest lotofacilRequest) {
+  public Mono<LotofacilResponse> saveConcurso(@Valid @RequestBody LotofacilRequest lotofacilRequest) {
     LOG.info("Salvando concurso Lotofacil [{}]", lotofacilRequest);
 
     return service.save(lotofacilRequest)

@@ -8,12 +8,12 @@ public class StandardMessage implements Serializable {
 
   private String error;
 
-  private String error_description;
+  private String errorDescription;
 
 
-  public StandardMessage(String error, String error_description) {
+  public StandardMessage(String error, String errorDescription) {
     this.error = error;
-    this.error_description = error_description;
+    this.errorDescription = errorDescription;
   }
 
   @Deprecated
@@ -24,20 +24,20 @@ public class StandardMessage implements Serializable {
     return error;
   }
 
-  public String getError_description() {
-    return error_description;
+  public String getErrorDescription() {
+    return errorDescription;
   }
 
-  public void updateMessage(String error, String error_message) {
+  public void updateMessage(String error, String errorDescription) {
     this.error = error;
-    this.error_description = error_message;
+    this.errorDescription = errorDescription;
   }
 
   @Override
   public String toString() {
     return new ToStringBuilder(this)
         .append("error", error)
-        .append("error_description", error_description)
+        .append("error_description", errorDescription)
         .toString();
   }
 }

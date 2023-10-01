@@ -24,8 +24,7 @@ public class LotofacilService {
 
   public Mono<Lotofacil> getByConcursoId(Long concursoId) {
     return lotofacilRepository.findById(concursoId)
-        .switchIfEmpty(
-            Mono.defer(() -> Mono.error(new ResourceNotFoundException(String.format("Concurso [%s] não encontrado na base de dados", concursoId)))))
+        .switchIfEmpty(Mono.defer(() -> Mono.error(new ResourceNotFoundException("O Concurso solicitado não foi encontrado."))))
         .doOnSuccess(lotofacil -> LOG.info(lotofacil.toString()))
         .doOnError(throwable -> LOG.error(throwable.getMessage()))
         .onErrorResume(ResourceNotFoundException.class, Mono::error);

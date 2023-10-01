@@ -3,7 +3,7 @@ package com.gabriel_os_sousa.loterias.exception;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class DomainException extends RuntimeException {
+public class LoteriasException extends RuntimeException {
 
   private static final long serialVersionUID = 1L;
 
@@ -11,13 +11,13 @@ public class DomainException extends RuntimeException {
 
   private String error;
 
-  public DomainException(int httpStatus, String error, String message) {
+  public LoteriasException(int httpStatus, String error, String message) {
     super(message);
     this.httpStatus = httpStatus;
     this.error = error;
   }
 
-  public DomainException(int httpStatus, String error, String message, Throwable cause) {
+  public LoteriasException(int httpStatus, String error, String message, Throwable cause) {
     super(message, cause);
     this.httpStatus = httpStatus;
     this.error = error;
