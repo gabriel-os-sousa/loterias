@@ -2,8 +2,8 @@ package com.gabriel_os_sousa.loterias.controller;
 
 
 import com.gabriel_os_sousa.loterias.exception.LoteriasException;
-import com.gabriel_os_sousa.loterias.model.InvalidRequestResponse;
 import com.gabriel_os_sousa.loterias.model.StandardMessage;
+import com.gabriel_os_sousa.loterias.model.response.InvalidRequestResponse;
 import jakarta.validation.ConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;

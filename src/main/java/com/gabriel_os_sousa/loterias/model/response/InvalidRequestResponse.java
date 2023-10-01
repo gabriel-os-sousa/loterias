@@ -1,4 +1,4 @@
-package com.gabriel_os_sousa.loterias.model;
+package com.gabriel_os_sousa.loterias.model.response;
 
 import java.util.Map;
 
