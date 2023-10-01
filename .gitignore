@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### checkstyle
+/config/checkstyle.xml
+/config/suppressions.xml
