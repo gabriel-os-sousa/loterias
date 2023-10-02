@@ -7,8 +7,8 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class LotofacilRequest {
@@ -17,9 +17,9 @@ public class LotofacilRequest {
   private Long concurso;
 
   @Size(min = 15, max = 15, message = "A lista deve conter 15 valores")
-  private Set<
+  private List<
       @Min(value = 1, message = "Valor deve estar no range [1,25]")
-      @Max(value = 25, message = "Valor deve estar no range [1,25]") Integer> dezenas;
+      @Max(value = 25, message = "Valor deve estar no range [1,25]") Integer> dezenasOrdemSorteio;
 
   @DateTimeFormat(pattern = "yyyy-MM-DD", iso = DATE_TIME)
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
@@ -27,7 +27,7 @@ public class LotofacilRequest {
 
   private LotofacilRequest(final LotofacilRequestBuilder lotofacilRequestBuilder) {
     this.concurso = lotofacilRequestBuilder.concurso;
-    this.dezenas = lotofacilRequestBuilder.dezenas;
+    this.dezenasOrdemSorteio = lotofacilRequestBuilder.dezenasOrdemSorteio;
     this.dataConcurso = lotofacilRequestBuilder.dataConcurso;
   }
 
@@ -38,8 +38,8 @@ public class LotofacilRequest {
     return concurso;
   }
 
-  public Set<Integer> getDezenas() {
-    return dezenas;
+  public List<Integer> getDezenasOrdemSorteio() {
+    return dezenasOrdemSorteio;
   }
 
   public LocalDate getDataConcurso() {
@@ -54,15 +54,15 @@ public class LotofacilRequest {
   public String toString() {
     return "LotofacilRequest{" +
         "concurso=" + concurso +
-        ", dezenas=" + dezenas +
+        ", dezenas=" + dezenasOrdemSorteio +
         ", dataConcurso=" + dataConcurso +
         '}';
   }
 
   public static class LotofacilRequestBuilder {
-    private Long concurso;
+    private final List<Integer> dezenasOrdemSorteio = new ArrayList<>();
 
-    private Set<Integer> dezenas = new HashSet<>();
+    private Long concurso;
 
     private LocalDate dataConcurso;
 
@@ -71,8 +71,8 @@ public class LotofacilRequest {
       return this;
     }
 
-    public LotofacilRequestBuilder withDezenas(Set<Integer> dezenas) {
-      this.dezenas.addAll(dezenas);
+    public LotofacilRequestBuilder withDezenasOrdemSorteio(List<Integer> dezenas) {
+      this.dezenasOrdemSorteio.addAll(dezenas);
       return this;
     }
 

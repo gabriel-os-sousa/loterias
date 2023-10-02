@@ -1,13 +1,17 @@
-package com.gabriel_os_sousa.loterias.model;
+package com.gabriel_os_sousa.loterias.model.mongo;
 
-import com.gabriel_os_sousa.loterias.model.request.LotofacilRequest;
+import com.gabriel_os_sousa.loterias.model.Lotofacil;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-public class Lotofacil {
+@Document(collection = "lotofacil")
+public class LotofacilEntity {
 
+  @Id
   private Long concurso;
 
   private TreeSet<Integer> dezenas;
@@ -16,10 +20,10 @@ public class Lotofacil {
 
   private LocalDate dataConcurso;
 
-  public Lotofacil() {
+  public LotofacilEntity() {
   }
 
-  private Lotofacil(final LotofacilBuilder lotofacilBuilder) {
+  private LotofacilEntity(final LotofacilBuilder lotofacilBuilder) {
     this.concurso = lotofacilBuilder.concurso;
     this.dezenas = lotofacilBuilder.dezenas;
     this.dezenasOrdemSorteio = lotofacilBuilder.dezenasOrdemSorteio;
@@ -30,6 +34,16 @@ public class Lotofacil {
     return new LotofacilBuilder();
   }
 
+  @Override
+  public String toString() {
+    return "LotofacilEntity{" +
+        "concurso=" + concurso +
+        ", dezenas=" + dezenas +
+        ", dezenasOrdemSorteio=" + dezenasOrdemSorteio +
+        ", dataConcurso=" + dataConcurso +
+        '}';
+  }
+
   public Long getConcurso() {
     return concurso;
   }
@@ -38,22 +52,12 @@ public class Lotofacil {
     return dezenas;
   }
 
-  public List<Integer> getDezenasOrdemSorteio() {
-    return dezenasOrdemSorteio;
-  }
-
   public LocalDate getDataConcurso() {
     return dataConcurso;
   }
 
-  @Override
-  public String toString() {
-    return "Lotofacil{" +
-        "concurso=" + concurso +
-        ", dezenas=" + dezenas +
-        ", dezenasOrdemSorteio=" + dezenasOrdemSorteio +
-        ", dataConcurso=" + dataConcurso +
-        '}';
+  public List<Integer> getDezenasOrdemSorteio() {
+    return dezenasOrdemSorteio;
   }
 
   public static class LotofacilBuilder {
@@ -73,12 +77,12 @@ public class Lotofacil {
       return this;
     }
 
-    public LotofacilBuilder withDezenas(List<Integer> dezenas) {
+    public LotofacilBuilder withDezenas(TreeSet<Integer> dezenas) {
       this.dezenas.addAll(dezenas);
       return this;
     }
 
-    public LotofacilBuilder withDezenasOrdemSorteio(TreeSet<Integer> dezenasOrdemSorteio) {
+    public LotofacilBuilder withDezenasOrdemSorteio(List<Integer> dezenasOrdemSorteio) {
       this.dezenasOrdemSorteio.addAll(dezenasOrdemSorteio);
       return this;
     }
@@ -88,16 +92,16 @@ public class Lotofacil {
       return this;
     }
 
-    public LotofacilBuilder withLotofacilRequest(LotofacilRequest request) {
-      this.concurso = request.getConcurso();
-      this.dezenas.addAll(request.getDezenasOrdemSorteio());
-      this.dezenasOrdemSorteio.addAll(request.getDezenasOrdemSorteio());
-      this.dataConcurso = request.getDataConcurso();
+    public LotofacilBuilder withLotofacilModel(Lotofacil model) {
+      this.concurso = model.getConcurso();
+      this.dezenas.addAll(model.getDezenas());
+      this.dezenasOrdemSorteio.addAll(model.getDezenasOrdemSorteio());
+      this.dataConcurso = model.getDataConcurso();
       return this;
     }
 
-    public Lotofacil build() {
-      return new Lotofacil(this);
+    public LotofacilEntity build() {
+      return new LotofacilEntity(this);
     }
   }
 }

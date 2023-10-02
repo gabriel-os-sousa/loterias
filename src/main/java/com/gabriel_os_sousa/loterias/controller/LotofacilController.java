@@ -39,7 +39,8 @@ public class LotofacilController {
   }
 
   @PostMapping
-  public Mono<LotofacilResponse> saveConcurso(@Valid @RequestBody LotofacilRequest lotofacilRequest) {
+  public Mono<LotofacilResponse> saveConcursoFromRequest(@Valid @RequestBody LotofacilRequest lotofacilRequest) {
+    // TODO: Verificar se concurso já foi computado no site da CAIXA
     LOG.info("Salvando concurso Lotofacil [{}]", lotofacilRequest);
 
     return service.save(lotofacilRequest)
@@ -48,5 +49,7 @@ public class LotofacilController {
         .doOnError(
             throwable -> LOG.info("Erro ao salvar concurso Lotofacil [{}]. Erro=[{}]", lotofacilRequest.getConcurso(), throwable.getMessage()));
   }
+
+  // TODO: buscar concurso no site da caixa e salvar
 
 }
