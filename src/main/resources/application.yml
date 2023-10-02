@@ -4,6 +4,7 @@ server:
 spring:
   data:
     mongodb:
+      auto-index-creation: true
       authentication-database: admin
       host: localhost
       port: 27017
