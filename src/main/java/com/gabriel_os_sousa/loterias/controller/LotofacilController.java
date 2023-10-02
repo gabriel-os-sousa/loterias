@@ -28,14 +28,16 @@ public class LotofacilController {
     this.service = service;
   }
 
-  @GetMapping("/{concursoId}")
-  public Mono<LotofacilResponse> getConcursoById(@PathVariable(name = "concursoId") Long concursoId) {
-    LOG.info("Iniciando busca de concurso por id [{}]", concursoId);
+  @GetMapping("/{numero}")
+  public Mono<LotofacilResponse> getConcursoById(@PathVariable(name = "numero") String numero) {
+    LOG.info("Iniciando busca de concurso por numero [{}]", numero);
 
-    return service.getByConcursoId(concursoId)
-        .map(LotofacilResponse::new)
-        .doOnSuccess(response -> LOG.info("Sucesso ao salvar concurso [{}]", concursoId))
-        .doOnError(throwable -> LOG.info("Erro ao consultar concurso por id [{}]. Erro=[{}]", concursoId, throwable.getMessage()));
+    return service.getByConcursoId(numero)
+        .map(lotofacil -> LotofacilResponse.builder()
+            .withLotofacil(lotofacil)
+            .build())
+        .doOnSuccess(response -> LOG.info("Sucesso ao salvar concurso [{}]", numero))
+        .doOnError(throwable -> LOG.info("Erro ao consultar concurso por numero [{}]. Erro=[{}]", numero, throwable.getMessage()));
   }
 
   @PostMapping
@@ -44,10 +46,12 @@ public class LotofacilController {
     LOG.info("Salvando concurso Lotofacil [{}]", lotofacilRequest);
 
     return service.save(lotofacilRequest)
-        .map(LotofacilResponse::new)
+        .map(lotofacil -> LotofacilResponse.builder()
+            .withLotofacil(lotofacil)
+            .build())
         .doOnSuccess(response -> LOG.info(response.toString()))
         .doOnError(
-            throwable -> LOG.info("Erro ao salvar concurso Lotofacil [{}]. Erro=[{}]", lotofacilRequest.getConcurso(), throwable.getMessage()));
+            throwable -> LOG.info("Erro ao salvar concurso Lotofacil [{}]. Erro=[{}]", lotofacilRequest.getNumero(), throwable.getMessage()));
   }
 
   // TODO: buscar concurso no site da caixa e salvar

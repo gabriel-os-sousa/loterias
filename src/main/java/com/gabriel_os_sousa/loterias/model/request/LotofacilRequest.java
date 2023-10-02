@@ -1,83 +1,130 @@
 package com.gabriel_os_sousa.loterias.model.request;
 
-import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.Max;
+import com.gabriel_os_sousa.loterias.model.enums.LoteriaEnum;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.format.annotation.DateTimeFormat;
 
 public class LotofacilRequest {
 
+  private Boolean acumulado;
+
   @Min(value = 1, message = "Número do concurso deve ser maior que 0")
-  private Long concurso;
+  private Long numero;
 
   @Size(min = 15, max = 15, message = "A lista deve conter 15 valores")
-  private List<
-      @Min(value = 1, message = "Valor deve estar no range [1,25]")
-      @Max(value = 25, message = "Valor deve estar no range [1,25]") Integer> dezenasOrdemSorteio;
+  private List<@Pattern(regexp = "\\b(?:0[1-9]|1\\d|2[0-5])\\b", message = "Deve ser um número [1-25] em formato de String e números menores que 10 devem conter 0 à esquerda") String>
+      dezenas;
 
-  @DateTimeFormat(pattern = "yyyy-MM-DD", iso = DATE_TIME)
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  private LocalDate dataConcurso;
+  //  @DateTimeFormat(pattern = "yyyy/MM/DD", iso = DATE_TIME)
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+  private LocalDate dataApuracao;
 
-  private LotofacilRequest(final LotofacilRequestBuilder lotofacilRequestBuilder) {
-    this.concurso = lotofacilRequestBuilder.concurso;
-    this.dezenasOrdemSorteio = lotofacilRequestBuilder.dezenasOrdemSorteio;
-    this.dataConcurso = lotofacilRequestBuilder.dataConcurso;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+  private LocalDate dataProximoConcurso;
+
+  private LoteriaEnum tipoJogo;
+
+  public LotofacilRequest() {
   }
 
-  private LotofacilRequest() {
+  private LotofacilRequest(Builder builder) {
+    this.acumulado = builder.acumulado;
+    this.numero = builder.numero;
+    this.dezenas = builder.dezenas;
+    this.dataApuracao = builder.dataApuracao;
+    this.dataProximoConcurso = builder.dataProximoConcurso;
+    this.tipoJogo = builder.tipoJogo;
   }
 
-  public Long getConcurso() {
-    return concurso;
+  public static Builder builder() {
+    return new Builder();
   }
 
-  public List<Integer> getDezenasOrdemSorteio() {
-    return dezenasOrdemSorteio;
+  public Boolean getAcumulado() {
+    return acumulado;
   }
 
-  public LocalDate getDataConcurso() {
-    return dataConcurso;
+  public Long getNumero() {
+    return numero;
   }
 
-  public void setDataConcurso(LocalDate dataConcurso) {
-    this.dataConcurso = dataConcurso;
+  public List<String> getDezenas() {
+    return dezenas;
+  }
+
+  public LocalDate getDataApuracao() {
+    return dataApuracao;
+  }
+
+  public LocalDate getDataProximoConcurso() {
+    return dataProximoConcurso;
+  }
+
+  public LoteriaEnum getTipoJogo() {
+    return tipoJogo;
   }
 
   @Override
   public String toString() {
     return "LotofacilRequest{" +
-        "concurso=" + concurso +
-        ", dezenas=" + dezenasOrdemSorteio +
-        ", dataConcurso=" + dataConcurso +
+        "acumulado='" + acumulado + '\'' +
+        ", numero=" + numero +
+        ", dezenas=" + dezenas +
+        ", dataApuracao=" + dataApuracao +
+        ", dataProximoConcurso=" + dataProximoConcurso +
+        ", tipoJogo=" + tipoJogo +
         '}';
   }
 
-  public static class LotofacilRequestBuilder {
-    private final List<Integer> dezenasOrdemSorteio = new ArrayList<>();
+  public static final class Builder {
 
-    private Long concurso;
+    private final List<String> dezenas = new ArrayList<>();
 
-    private LocalDate dataConcurso;
+    private Boolean acumulado;
 
-    public LotofacilRequestBuilder withConcurso(Long concurso) {
-      this.concurso = concurso;
+    private Long numero;
+
+    private LocalDate dataApuracao;
+
+    private LocalDate dataProximoConcurso;
+
+    private LoteriaEnum tipoJogo;
+
+    public Builder() {
+    }
+
+    public Builder withAcumulado(final Boolean acumulado) {
+      this.acumulado = acumulado;
       return this;
     }
 
-    public LotofacilRequestBuilder withDezenasOrdemSorteio(List<Integer> dezenas) {
-      this.dezenasOrdemSorteio.addAll(dezenas);
+    public Builder withNumero(final Long numero) {
+      this.numero = numero;
       return this;
     }
 
-    public LotofacilRequestBuilder withDataConcurso(LocalDate dataConcurso) {
-      this.dataConcurso = dataConcurso;
+    public Builder withDezenas(final List<String> dezenas) {
+      this.dezenas.addAll(dezenas);
+      return this;
+    }
+
+    public Builder withDataApuracao(final LocalDate dataApuracao) {
+      this.dataApuracao = dataApuracao;
+      return this;
+    }
+
+    public Builder withDataProximoConcurso(final LocalDate dataProximoConcurso) {
+      this.dataProximoConcurso = dataProximoConcurso;
+      return this;
+    }
+
+    public Builder withTipoJogo(final LoteriaEnum tipoJogo) {
+      this.tipoJogo = tipoJogo;
       return this;
     }
 

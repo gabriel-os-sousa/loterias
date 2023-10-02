@@ -56,7 +56,7 @@ public class ExceptionHandlerController {
   // TODO: Remover esse handler genérico
   @ExceptionHandler(Exception.class)
   public Mono<ResponseEntity<StandardMessage>> handleGenericException(Exception e) {
-    LOG.warn("Ocorreu uma exceção de validação: [{}] [{}]", e.getCause(), e.getMessage());
+    LOG.warn("Ocorreu uma exceção: [{}]", e);
     return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(new StandardMessage("UNKNWON_ERROR", e.getMessage())));
   }

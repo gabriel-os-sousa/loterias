@@ -1,98 +1,174 @@
 package com.gabriel_os_sousa.loterias.model;
 
+import com.gabriel_os_sousa.loterias.model.enums.LoteriaEnum;
+import com.gabriel_os_sousa.loterias.model.mongo.LotofacilItem;
 import com.gabriel_os_sousa.loterias.model.request.LotofacilRequest;
+import com.gabriel_os_sousa.loterias.utils.StringNumberSorterUtil;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeSet;
 
 public class Lotofacil {
+  private String id;
 
-  private Long concurso;
+  private Boolean acumulado;
 
-  private TreeSet<Integer> dezenas;
+  private LocalDate dataApuracao;
 
-  private List<Integer> dezenasOrdemSorteio;
+  private LocalDate dataProximoConcurso;
 
-  private LocalDate dataConcurso;
+  private Long numero;
+
+  private List<String> dezenas;
+
+  private List<String> dezenasOrdenadas;
+
+  private LoteriaEnum tipoJogo;
 
   public Lotofacil() {
   }
 
-  private Lotofacil(final LotofacilBuilder lotofacilBuilder) {
-    this.concurso = lotofacilBuilder.concurso;
-    this.dezenas = lotofacilBuilder.dezenas;
-    this.dezenasOrdemSorteio = lotofacilBuilder.dezenasOrdemSorteio;
-    this.dataConcurso = lotofacilBuilder.dataConcurso;
+  private Lotofacil(Builder builder) {
+    this.id = builder.id;
+    this.acumulado = builder.acumulado;
+    this.dataApuracao = builder.dataApuracao;
+    this.dataProximoConcurso = builder.dataProximoConcurso;
+    this.numero = builder.numero;
+    this.dezenas = builder.dezenas;
+    this.dezenasOrdenadas = builder.dezenasOrdenadas;
+    this.tipoJogo = builder.tipoJogo;
   }
 
-  public static LotofacilBuilder builder() {
-    return new LotofacilBuilder();
+  public static Lotofacil.Builder builder() {
+    return new Builder();
   }
 
-  public Long getConcurso() {
-    return concurso;
+  public String getId() {
+    return id;
   }
 
-  public TreeSet<Integer> getDezenas() {
+  public Boolean getAcumulado() {
+    return acumulado;
+  }
+
+  public LocalDate getDataApuracao() {
+    return dataApuracao;
+  }
+
+  public LocalDate getDataProximoConcurso() {
+    return dataProximoConcurso;
+  }
+
+  public Long getNumero() {
+    return numero;
+  }
+
+  public List<String> getDezenas() {
     return dezenas;
   }
 
-  public List<Integer> getDezenasOrdemSorteio() {
-    return dezenasOrdemSorteio;
+  public LoteriaEnum getTipoJogo() {
+    return tipoJogo;
   }
 
-  public LocalDate getDataConcurso() {
-    return dataConcurso;
+  public List<String> getDezenasOrdenadas() {
+    return dezenasOrdenadas;
   }
 
   @Override
   public String toString() {
     return "Lotofacil{" +
-        "concurso=" + concurso +
+        "id='" + id + '\'' +
+        ", acumulado='" + acumulado + '\'' +
+        ", dataApuracao=" + dataApuracao +
+        ", dataProximoConcurso=" + dataProximoConcurso +
+        ", numero=" + numero +
         ", dezenas=" + dezenas +
-        ", dezenasOrdemSorteio=" + dezenasOrdemSorteio +
-        ", dataConcurso=" + dataConcurso +
+        ", dezenasOrdenadas=" + dezenasOrdenadas +
+        ", tipoJogo=" + tipoJogo +
         '}';
   }
 
-  public static class LotofacilBuilder {
-    private final TreeSet<Integer> dezenas = new TreeSet<>();
+  public static final class Builder {
 
-    private final List<Integer> dezenasOrdemSorteio = new ArrayList<>();
+    private final List<String> dezenas = new ArrayList<>();
 
-    private Long concurso;
+    private final List<String> dezenasOrdenadas = new ArrayList<>();
 
-    private LocalDate dataConcurso;
+    private String id;
 
-    private LotofacilBuilder() {
+    private Boolean acumulado;
+
+    private LocalDate dataApuracao;
+
+    private LocalDate dataProximoConcurso;
+
+    private Long numero;
+
+    private LoteriaEnum tipoJogo;
+
+    public Builder() {
     }
 
-    public LotofacilBuilder withConcurso(Long concurso) {
-      this.concurso = concurso;
+    public Builder withId(String id) {
+      this.id = id;
       return this;
     }
 
-    public LotofacilBuilder withDezenas(List<Integer> dezenas) {
+    public Builder withAcumulado(Boolean acumulado) {
+      this.acumulado = acumulado;
+      return this;
+    }
+
+    public Builder withDataApuracao(LocalDate dataApuracao) {
+      this.dataApuracao = dataApuracao;
+      return this;
+    }
+
+    public Builder withDataProximoConcurso(LocalDate dataProximoConcurso) {
+      this.dataProximoConcurso = dataProximoConcurso;
+      return this;
+    }
+
+    public Builder withNumero(Long numero) {
+      this.numero = numero;
+      return this;
+    }
+
+    public Builder withDezenas(List<String> dezenas) {
       this.dezenas.addAll(dezenas);
       return this;
     }
 
-    public LotofacilBuilder withDezenasOrdemSorteio(TreeSet<Integer> dezenasOrdemSorteio) {
-      this.dezenasOrdemSorteio.addAll(dezenasOrdemSorteio);
+    public Builder withDezenasOrdenadas(List<String> dezenasOrdenadas) {
+      this.dezenasOrdenadas.addAll(dezenasOrdenadas);
       return this;
     }
 
-    public LotofacilBuilder withDataConcurso(LocalDate dataConcurso) {
-      this.dataConcurso = dataConcurso;
+    public Builder withTipoJogo(LoteriaEnum tipoJogo) {
+      this.tipoJogo = tipoJogo;
       return this;
     }
 
-    public LotofacilBuilder withLotofacilRequest(LotofacilRequest request) {
-      this.concurso = request.getConcurso();
-      this.dezenas.addAll(request.getDezenasOrdemSorteio());
-      this.dezenasOrdemSorteio.addAll(request.getDezenasOrdemSorteio());
-      this.dataConcurso = request.getDataConcurso();
+    public Builder withLotofacilRequest(LotofacilRequest request) {
+      this.numero = request.getNumero();
+      this.acumulado = request.getAcumulado();
+      this.dezenas.addAll(request.getDezenas());
+      this.dataApuracao = request.getDataApuracao();
+      this.dataProximoConcurso = request.getDataProximoConcurso();
+      this.tipoJogo = request.getTipoJogo();
+      return this;
+    }
+
+    public Builder withLotofacilItem(LotofacilItem lotofacilItem) {
+      this.id = lotofacilItem.getId();
+      this.numero = lotofacilItem.getNumero();
+      this.acumulado = lotofacilItem.getAcumulado();
+      this.dezenas.addAll(lotofacilItem.getDezenas());
+      this.dezenasOrdenadas.addAll(StringNumberSorterUtil.sortStringNumbers(this.dezenas));
+      this.dataApuracao = lotofacilItem.getDataApuracao();
+      this.dataProximoConcurso = lotofacilItem.getDataProximoConcurso();
+      this.tipoJogo = lotofacilItem.getTipoJogo();
       return this;
     }
 
@@ -101,3 +177,5 @@ public class Lotofacil {
     }
   }
 }
+
+

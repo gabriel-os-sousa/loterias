@@ -2,7 +2,7 @@ package com.gabriel_os_sousa.loterias.service;
 
 import com.gabriel_os_sousa.loterias.exception.ResourceNotFoundException;
 import com.gabriel_os_sousa.loterias.model.Lotofacil;
-import com.gabriel_os_sousa.loterias.model.mongo.LotofacilEntity;
+import com.gabriel_os_sousa.loterias.model.mongo.LotofacilItem;
 import com.gabriel_os_sousa.loterias.model.request.LotofacilRequest;
 import com.gabriel_os_sousa.loterias.repository.LotofacilRepository;
 import org.slf4j.Logger;
@@ -23,31 +23,32 @@ public class LotofacilService {
     this.lotofacilRepository = lotofacilRepository;
   }
 
-  public Mono<LotofacilEntity> getByConcursoId(Long concursoId) {
-    return lotofacilRepository.findById(concursoId)
+  public Mono<Lotofacil> getByConcursoId(String numero) {
+    return lotofacilRepository.findByNumero(numero)
+        .map(lotofacilItem -> Lotofacil.builder()
+            .withLotofacilItem(lotofacilItem)
+            .build())
         .switchIfEmpty(Mono.defer(() -> Mono.error(new ResourceNotFoundException("O Concurso solicitado não foi encontrado."))))
-        .doOnSuccess(lotofacilEntity -> LOG.info(lotofacilEntity.toString()))
+        .doOnSuccess(lotofacilItem -> LOG.info(lotofacilItem.toString()))
         .doOnError(throwable -> LOG.error(throwable.getMessage()))
         .onErrorResume(ResourceNotFoundException.class, Mono::error);
   }
 
-  public Mono<LotofacilEntity> save(LotofacilRequest lotofacilRequest) {
-    // TODO: adicionar campos de ordem de dezenas. Dezenas ordenadas e não ordenadas
-
+  public Mono<Lotofacil> save(LotofacilRequest lotofacilRequest) {
     var model = Lotofacil.builder()
         .withLotofacilRequest(lotofacilRequest)
         .build();
 
     // Criar entidade para salvar no banco
-    var entity = LotofacilEntity.builder()
-        .withConcurso(model.getConcurso())
-        .withDezenas(model.getDezenas())
-        .withDezenasOrdemSorteio(model.getDezenasOrdemSorteio())
-        .withDataConcurso(model.getDataConcurso())
+    var entity = LotofacilItem.builder()
+        .withLotofacilModel(model)
         .build();
 
     return lotofacilRepository.save(entity)
-        .doOnSuccess(lotofacilEntity -> LOG.info("Concurso lotofacil salvo com sucesso [{}]", lotofacilEntity))
+        .map(lotofacilItem -> Lotofacil.builder()
+            .withLotofacilItem(lotofacilItem)
+            .build())
+        .doOnSuccess(lotofacilItem -> LOG.info("Concurso lotofacil salvo com sucesso [{}]", lotofacilItem))
         .doOnError(throwable -> LOG.error("Erro ao salvar concurso [{}]", throwable.getMessage()));
   }
 }

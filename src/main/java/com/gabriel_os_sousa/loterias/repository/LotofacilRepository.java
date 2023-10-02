@@ -1,10 +1,9 @@
 package com.gabriel_os_sousa.loterias.repository;
 
-import com.gabriel_os_sousa.loterias.model.mongo.LotofacilEntity;
-import java.util.Set;
+import com.gabriel_os_sousa.loterias.model.mongo.LotofacilItem;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import reactor.core.publisher.Mono;
 
-public interface LotofacilRepository extends ReactiveMongoRepository<LotofacilEntity, Long> {
-  Mono<LotofacilEntity> findFirstByDezenas(Set<Integer> dezenas);
+public interface LotofacilRepository extends ReactiveMongoRepository<LotofacilItem, Long> {
+  Mono<LotofacilItem> findByNumero(String numero);
 }
